@@ -1,16 +1,27 @@
+// ## User Story
+
+// AS A coding boot camp student I WANT to take a timed quiz on JavaScript fundamentals that stores high scores SO THAT I can gauge my progress compared to my peers
+
+// ## Acceptance Criteria
+
+// GIVEN I am taking a code quiz WHEN I click the start button THEN a timer starts and I am presented with a question WHEN I answer a question
+
+// THEN I am presented with another question WHEN I answer a question incorrectly  THEN time is subtracted from the clock WHEN all questions are answered or the timer reaches 
+
+// THEN the game is over WHEN the game is over THEN I can save my initials and my score
+
+
+//variables go here
 const quizData = [
   {
-    question: "What does html stand for?",
-    a: "Hypertext markup Language",
-    b: "Hypertext madeup Language",
-    c: "Hypetext markup Language",
-    d: "None of the above",
-    correct: "a",
+    question: "What does HTML stand for?",
+    choices: ["Hypertext markup Language", "Hypertext madeup Language", "Hypetext markup Language", "None of the above"],
+    correct: "Hypertext markup Language",
   },
-  
+
   {
     question: "What application controls the styling of the page?",
-    a1: "HTML",
+    a: "HTML",
     b: "CSS",
     c: "Python",
     d: "Wix",
@@ -44,40 +55,67 @@ const quizData = [
 ];
 
 const start = document.getElementById('start')
-
 const quiz = document.getElementById('quiz')
 const answers = document.querySelectorAll('.answer')
-const questions = document.getElementById('question')
-const a_answer = document.getElementById('a_answer')
-const b_answer = document.getElementById('b_answer')
-const c_answer = document.getElementById('c_answer')
-const d_answer = document.getElementById('d_answer')
+const questionContainer = document.getElementById('questionContainer')
 
-let currentQuiz = 0
+const questionsTitle = document.getElementById('question')
+
+const questionChoices = document.getElementById('questionChoices')
+
+// This is for the timer
+let timer = 60;
+const timeEl = document.getElementById('time');
+
+let index = 0
 let score = 0
 
+// functions 
 
+function startQuiz() {
 
-
-start.addEventListener('click', startQuiz)
-
-
-
-function startQuiz(){
-  
-  quiz.classList.remove('hide')
+  questionContainer.classList.remove('hide')
   start.setAttribute("class", "hide")
-  console.log('start')
-  const currentQuizData = quizData[currentQuiz]
-  for(var i=0 ; i<quizData.length; i++){
-    questions.innerText= quizData[i].question;
-    a_answer.innerText = quizData[i].a;
-    b_answer.innerText = quizData[i].b;
-    c_answer.innerText = quizData[i].c;
-    d_answer.innerText = quizData[i].d;
-   
-  }
-  questions.innerText = currentQuizData.question
+
+
+  timeEl.textContent = timer;
+  setInterval(function () {
+    timer--;
+    timeEl.textContent = timer;
+  }, 1000
+
+  )
+
+  loadQuestions();
+
 }
 
 
+
+function loadQuestions() {
+  let currentQuestion = quizData[index]
+  questionsTitle.textContent = currentQuestion.question;
+
+  questionChoices.innerHTML = '';
+
+  for (let i = 0; i < currentQuestion.choices.length; i++) {
+    //create buttons for choices
+    let btn = document.createElement('button');
+    btn.textContent = currentQuestion.choices[i]
+    btn.setAttribute('value', currentQuestion.choices[i])
+
+    btn.onclick = checkAnswers;
+
+    questionChoices.append(btn)
+
+  }
+
+}
+
+function checkAnswers() {
+  console.log(this.value)
+};
+
+//eventlisteners
+
+start.addEventListener('click', startQuiz)
