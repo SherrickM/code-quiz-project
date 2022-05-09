@@ -16,7 +16,7 @@
 const quizData = [
   {
     question: "What does HTML stand for?",
-    choices: ["Hypertext markup Language", "Hypertext madeup Language", "Hypetext markup Language", "None of the above"],
+    choices: ["Hypertext markup Language", "Hypertext madeup Language", "Hypetext manup Language", "None of the above"],
     correct: "Hypertext markup Language",
   },
 
