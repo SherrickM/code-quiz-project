@@ -30,22 +30,16 @@ const quizData = [
     choices: ["Numbers", "Strings", "Other arrays", "All of the above",],
     correct: "All of the above",
   },
-  // {
-  //   question: "Javascript can be used to create ______ on a webpage. ",
-  //   choices: "HTML",
-  //   b: "CSS",
-  //   c: "Animations",
-  //   d: "All of the above",
-  //   correct: "d",
-  // },
-  // {
-  //   question: "What application is used to log code to the console?",
-  //   a: "HTML",
-  //   b: "CSS",
-  //   c: "Javascript",
-  //   d: "All of the above",
-  //   correct: "c",
-  // },
+  {
+    question: "Javascript can be used to create ______ on a webpage. ",
+    choices: ["HTML", "CSS", "Animations", "All of the above",],
+    correct: "All of the above",
+  },
+  {
+    question: "What application is used to log code to the console?",
+    choices: ["HTML", "CSS", "Javascript", "All of the above",],
+    correct: "Javascript",
+  },
 
 ];
 
