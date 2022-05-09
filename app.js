@@ -12,6 +12,7 @@
 
 
 //variables go here
+
 const quizData = [
   {
     question: "What does HTML stand for?",
@@ -21,36 +22,30 @@ const quizData = [
 
   {
     question: "What application controls the styling of the page?",
-    a: "HTML",
-    b: "CSS",
-    c: "Python",
-    d: "Wix",
-    correct: "b",
+    choices: ["HTML", "CSS", "Python", "Wix",],
+    correct: "CSS",
   },
   {
     question: "Arrays in javascript can be used to store?",
-    a: "Numbers",
-    b: "Strings",
-    c: "Other arrays",
-    d: "All of the above",
-    correct: "d",
+    choices: ["Numbers", "Strings", "Other arrays", "All of the above",],
+    correct: "All of the above",
   },
-  {
-    question: "Javascript can be used to create ______ on a webpage. ",
-    a: "HTML",
-    b: "CSS",
-    c: "Animations",
-    d: "All of the above",
-    correct: "d",
-  },
-  {
-    question: "What application is used to log code to the console?",
-    a: "HTML",
-    b: "CSS",
-    c: "Javascript",
-    d: "All of the above",
-    correct: "c",
-  },
+  // {
+  //   question: "Javascript can be used to create ______ on a webpage. ",
+  //   choices: "HTML",
+  //   b: "CSS",
+  //   c: "Animations",
+  //   d: "All of the above",
+  //   correct: "d",
+  // },
+  // {
+  //   question: "What application is used to log code to the console?",
+  //   a: "HTML",
+  //   b: "CSS",
+  //   c: "Javascript",
+  //   d: "All of the above",
+  //   correct: "c",
+  // },
 
 ];
 
@@ -62,15 +57,18 @@ const questionContainer = document.getElementById('questionContainer')
 const questionsTitle = document.getElementById('question')
 
 const questionChoices = document.getElementById('questionChoices')
+const saveBtn = document.getElementById('save')
 
 // This is for the timer
 let timer = 60;
 const timeEl = document.getElementById('time');
-
 let index = 0
 let score = 0
+let interval;
 
 // functions 
+
+// GIVEN I am taking a code quiz WHEN I click the start button THEN a timer starts and I am presented with a question WHEN I answer a question
 
 function startQuiz() {
 
@@ -79,9 +77,14 @@ function startQuiz() {
 
 
   timeEl.textContent = timer;
-  setInterval(function () {
+  interval = setInterval(function () {
     timer--;
     timeEl.textContent = timer;
+
+    if (timer <= 0) {
+      stopQuiz();
+    }
+
   }, 1000
 
   )
@@ -114,8 +117,76 @@ function loadQuestions() {
 
 function checkAnswers() {
   console.log(this.value)
+
+  // WHEN I answer a question incorrectly THEN time is subtracted from the clock
+  if (this.value !== quizData[index].correct) {
+    timer -= 15;
+    timeEl.textContent = timer;
+
+    if (timer < 0) {
+      timer = 0;
+    }
+  }
+
+  //  WHEN I answer a question THEN I am presented with another question 
+  index++;
+
+  // we need to check if there are more questions left in the array if not the game is over
+  if (quizData.length === index) {
+    stopQuiz();
+  }
+  else {
+    loadQuestions();
+  }
 };
+
+
+function stopQuiz() {
+
+  // WHEN all questions are answered or the timer reaches 0
+  clearInterval(interval)
+
+  //show the gameover container
+  const gameOverEl = document.getElementById('game-over-container');
+
+  gameOverEl.classList.remove('hide')
+  questionContainer.classList.add('hide')
+
+
+}
+
+
+function saveScore() {
+  // THEN the game is over WHEN the game is over THEN I can save my initials and my score...NEED TO SAVE TO LOCAL STORAGE
+  const initialsVal = document.getElementById('initials').value;
+
+
+  // Add a condition that will check if the initials is empty
+  if (initialsVal !== "") {
+
+    const score = {
+      score: timer,
+      initials: initialsVal
+    }
+
+    //get the saved highscores from local storage if no scores exists set this as an empty array
+    const highScore = JSON.parse(localStorage.getItem('highscores')) || [];
+
+    highScore.push(score);
+
+    localStorage.setItem('highscores', JSON.stringify(highScore));
+
+    //reload page when initials are saved
+    location.reload();
+  }
+
+}
+
+
+
 
 //eventlisteners
 
 start.addEventListener('click', startQuiz)
+
+saveBtn.addEventListener('click', saveScore)
